@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameVerse - Your Ultimate Gaming Hub</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      min-height: 100vh;
+      transition: all 0.3s ease;
+      overflow-x: hidden;
+    }
+    
+    body.dark {
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+    }
+    
+    .floating-shapes {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-shapes:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+    .floating-shapes:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+    .floating-shapes:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    /* Header */
+    header {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 15px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    nav a:hover::before {
+      left: 100%;
+    }
+    
+    nav a:hover, nav a.active {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .theme-toggle {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 120px 20px 80px;
+      position: relative;
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5)); }
+      to { filter: drop-shadow(0 0 30px rgba(78, 205, 196, 0.5)); }
+    }
+    
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      padding: 15px 40px;
+      border-radius: 30px;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: pulse 2s infinite;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4); }
+      50% { box-shadow: 0 15px 40px rgba(78, 205, 196, 0.4); }
+      100% { box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4); }
+    }
+    
+    /* Page Content */
+    .page {
+      display: none;
+      min-height: 60vh;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .page.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 50px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Card Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.7s;
+    }
+    
+    .card:hover::before {
+      left: 100%;
+    }
+    
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #4ecdc4;
+    }
+    
+    .card p {
+      opacity: 0.8;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .card-button {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 15px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .card-button:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Game Stats */
+    .game-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #4ecdc4;
+    }
+    
+    /* Video Player */
+    .video-container {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .video-player {
+      width: 100%;
+      height: 300px;
+      background: #000;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 1.2rem;
+    }
+    
+    /* Community Features */
+    .chat-box {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    
+    .message {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .message strong {
+      color: #4ecdc4;
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .input-group input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+    }
+    
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .send-btn {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.9);
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 80px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .footer-links a {
+      color: #4ecdc4;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: #ff6b6b;
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="floating-shapes"></div>
+    <div class="floating-shapes"></div>
+    <div class="floating-shapes"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      🎮 GameVerse
+    </div>
+    <nav>
+      <a href="#" onclick="showPage('home'); return false;" class="nav-link active">Home</a>
+      <a href="#" onclick="showPage('games'); return false;" class="nav-link">Games</a>
+      <a href="#" onclick="showPage('videos'); return false;" class="nav-link">Videos</a>
+      <a href="#" onclick="showPage('community'); return false;" class="nav-link">Community</a>
+      <a href="#" onclick="showPage('about'); return false;" class="nav-link">About</a>
+    </nav>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+  </header>
+
+  <!-- Home Page -->
+  <div id="home" class="page active">
+    <div class="hero">
+      <h1>Welcome to GameVerse</h1>
+      <p>Your ultimate destination for gaming, videos, and community connection!</p>
+      <a href="#" onclick="showPage('games')" class="cta-button">🎮 Start Gaming</a>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>🎯 Featured Games</h3>
+        <p>Discover the hottest games trending in our community right now.</p>
+        <button class="card-button" onclick="showPage('games')">🎮 Explore Games</button>
+      </div>
+      <div class="card">
+        <h3>🎬 Latest Videos</h3>
+        <p>Watch gameplay videos, tutorials, and entertainment content.</p>
+        <button class="card-button" onclick="showPage('videos')">📺 Watch Now</button>
+      </div>
+      <div class="card">
+        <h3>👥 Join Community</h3>
+        <p>Connect with fellow gamers and share your gaming experiences.</p>
+        <button class="card-button" onclick="showPage('community')">💬 Join Chat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Games Page -->
+  <div id="games" class="page">
+    <h2 class="section-title">🎮 Popular Games</h2>
+    
+    <div class="card-grid">
+      <div class="card">
+        <h3>🏗️ Minecraft</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">500M+</div>
+            <div>Players</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.8⭐</div>
+            <div>Rating</div>
+          </div>
+        </div>
+        <p>Build, survive, and explore endless worlds of creativity. The ultimate sandbox experience.</p>
+        <button class="card-button" onclick="playGame('minecraft')">🎮 Play Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>🎨 Scratch</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">100M+</div>
+            <div>Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.7⭐</div>
+            <div>Rating</div>
+          </div>
+        </div>
+        <p>Create interactive stories, animations, and games with visual programming blocks.</p>
+        <button class="card-button" onclick="playGame('scratch')">🎮 Create Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>🚀 Among Us</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">500M+</div>
+            <div>Downloads</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.2⭐</div>
+            <div>Rating</div>
+          </div>
+        </div>
+        <p>Work together as a team, but beware of the impostor sabotaging your mission!</p>
+        <button class="card-button" onclick="playGame('amongus')">🎮 Play Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>🏃 Temple Run</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">1B+</div>
+            <div>Downloads</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.5⭐</div>
+            <div>Rating</div>
+          </div>
+        </div>
+        <p>Endless running adventure through ancient temple ruins. How far can you go?</p>
+        <button class="card-button" onclick="playGame('templerun')">🎮 Run Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>⚡ Subway Surfers</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">4B+</div>
+            <div>Downloads</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.6⭐</div>
+            <div>Rating</div>
+          </div>
+        </div>
+        <p>Surf through subway tracks, dodge trains, and collect coins in this endless runner.</p>
+        <button class="card-button" onclick="playGame('subway')">🎮 Surf Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>🧩 2048</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">50M+</div>
+            <div>Players</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.4⭐</div>
+            <div>Rating</div>
+          </div>
+        </div>
+        <p>Merge numbered tiles to reach 2048. Simple concept, addictive gameplay!</p>
+        <button class="card-button" onclick="playGame('2048')">🎮 Play Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Videos Page -->
+  <div id="videos" class="page">
+    <h2 class="section-title">🎬 Trending Videos</h2>
+    
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔥 Epic Minecraft Builds</h3>
+        <div class="video-container">
+          <div class="video-player">
+            🎬 Video Player - Epic castle build timelapse
+          </div>
+        </div>
+        <p>Watch incredible architectural masterpieces being built in Minecraft.</p>
+        <button class="card-button">▶️ Watch Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>🎯 Among Us Best Moments</h3>
+        <div class="video-container">
+          <div class="video-player">
+            🎬 Video Player - Funny impostor compilation
+          </div>
+        </div>
+        <p>Hilarious impostor plays and detective work from the community.</p>
+        <button class="card-button">▶️ Watch Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>📚 Scratch Programming Tutorial</h3>
+        <div class="video-container">
+          <div class="video-player">
+            🎬 Video Player - Learn to code your first game
+          </div>
+        </div>
+        <p>Step-by-step guide to creating your first game in Scratch.</p>
+        <button class="card-button">▶️ Watch Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Community Page -->
+  <div id="community" class="page">
+    <h2 class="section-title">👥 GameVerse Community</h2>
+    
+    <div class="card-grid">
+      <div class="card">
+        <h3>💬 Live Chat</h3>
+        <div class="chat-box" id="chatBox">
+          <div class="message">
+            <strong>GameMaster:</strong> Welcome to GameVerse! Share your gaming experiences here.
+          </div>
+          <div class="message">
+            <strong>Player1:</strong> Just finished building a castle in Minecraft! 🏰
+          </div>
+          <div class="message">
+            <strong>ProGamer:</strong> Anyone want to team up for Among Us?
+          </div>
+        </div>
+        <div class="input-group">
+          <input type="text" id="messageInput" placeholder="Type your message..." maxlength="200">
+          <button class="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3>🏆 Leaderboard</h3>
+        <div style="text-align: left;">
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.1); margin: 10px 0; border-radius: 10px;">
+            <span>🥇 SuperGamer</span>
+            <span>15,420 pts</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.1); margin: 10px 0; border-radius: 10px;">
+            <span>🥈 MinecraftPro</span>
+            <span>12,800 pts</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.1); margin: 10px 0; border-radius: 10px;">
+            <span>🥉 GameWizard</span>
+            <span>11,200 pts</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.05); margin: 10px 0; border-radius: 10px;">
+            <span>4️⃣ PixelMaster</span>
+            <span>9,850 pts</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.05); margin: 10px 0; border-radius: 10px;">
+            <span>5️⃣ CodeNinja</span>
+            <span>8,920 pts</span>
+          </div>
+        </div>
+        <button class="card-button" onclick="showStats()">📊 View Full Rankings</button>
+      </div>
+      
+      <div class="card">
+        <h3>📅 Upcoming Events</h3>
+        <div style="text-align: left;">
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); margin: 10px 0; border-radius: 10px; cursor: pointer;" onclick="joinEvent('minecraft-contest')">
+            <strong>🏆 Minecraft Build Contest</strong><br>
+            <small>Starts in 2 days • Prize: $100 Steam Gift Card</small><br>
+            <small>👥 45 participants registered</small>
+          </div>
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); margin: 10px 0; border-radius: 10px; cursor: pointer;" onclick="joinEvent('amongus-tournament')">
+            <strong>🎮 Among Us Tournament</strong><br>
+            <small>This weekend • Prize: Gaming Headset</small><br>
+            <small>👥 32/64 players registered</small>
+          </div>
+          <div style="padding: 15px; background: rgba(255,255,255,0.05); margin: 10px 0; border-radius: 10px; cursor: pointer;" onclick="joinEvent('scratch-challenge')">
+            <strong>🎨 Scratch Creation Challenge</strong><br>
+            <small>Next month • Prize: $50 + Featured showcase</small><br>
+            <small>👥 28 participants registered</small>
+          </div>
+        </div>
+        <button class="card-button" onclick="alert('🎪 More events coming soon!\n\n• Weekly tournaments\n• Seasonal challenges\n• Community showcases\n\nStay tuned!')">🎪 View All Events</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Page -->
+  <div id="about" class="page">
+    <h2 class="section-title">ℹ️ About GameVerse</h2>
+    
+    <div class="card-grid">
+      <div class="card">
+        <h3>🚀 Our Mission</h3>
+        <p>GameVerse is dedicated to creating the ultimate gaming community where players of all ages can discover, play, and share their favorite games. We believe gaming brings people together and creates lasting friendships.</p>
+        <button class="card-button" onclick="alert('🎯 Our Goals:\n\n• Safe gaming environment for all ages\n• Foster creativity and learning\n• Build global gaming friendships\n• Support indie game developers\n• Promote healthy gaming habits')">Learn More</button>
+      </div>
+      
+      <div class="card">
+        <h3>✨ Features</h3>
+        <p>• Access to popular web games<br>
+        • Video content and tutorials<br>
+        • Live community chat<br>
+        • Gaming events and tournaments<br>
+        • Player rankings and achievements<br>
+        • Safe, moderated environment</p>
+        <button class="card-button" onclick="alert('🆕 Coming Soon:\n\n• Mobile app\n• VR game support\n• Streaming integration\n• Custom game creation tools\n• AI gaming assistant')">🔮 What's Next</button>
+      </div>
+      
+      <div class="card">
+        <h3>📊 Platform Stats</h3>
+        <div class="game-stats">
+          <div class="stat">
+            <div class="stat-number">52K+</div>
+            <div>Active Users</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">25+</div>
+            <div>Games</div>
+          </div>
+        </div>
+        <div class="game-stats" style="margin-top: 15px;">
+          <div class="stat">
+            <div class="stat-number">1.2M+</div>
+            <div>Games Played</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">89K+</div>
+            <div>Videos Watched</div>
+          </div>
+        </div>
+        <p>Join thousands of gamers in our growing community!</p>
+        <button class="card-button" onclick="showStats()">📈 Live Statistics</button>
+      </div>
+      
+      <div class="card">
+        <h3>🛡️ Safety First</h3>
+        <p>We prioritize user safety with 24/7 moderation, content filtering, and secure chat systems. Our platform is designed to be enjoyable for gamers of all ages while maintaining a respectful environment.</p>
+        <button class="card-button" onclick="alert('🛡️ Safety Features:\n\n• Real-time chat moderation\n• Content filtering system\n• Report & block functions\n• Parental controls\n• Privacy protection\n• Anti-bullying measures\n\n📞 Safety Hotline: 1-800-GAMEVERSE')">🔒 Safety Details</button>
+      </div>
+      
+      <div class="card">
+        <h3>👥 Meet the Team</h3>
+        <p>GameVerse is built by passionate gamers and developers who understand what makes gaming communities special. Our diverse team works around the clock to bring you the best gaming experience.</p>
+        <button class="card-button" onclick="alert('🎮 GameVerse Team:\n\n👩‍💻 Sarah Chen - Lead Developer\n🎨 Marcus Johnson - UI/UX Designer  \n🛡️ Alex Rivera - Community Manager\n📊 Dr. Kim Park - Data Scientist\n🎪 Jamie Taylor - Event Coordinator\n\nWe are hiring! Join our team!')">👥 Our Team</button>
+      </div>
+      
+      <div class="card">
+        <h3>📞 Contact Us</h3>
+        <p>Have questions, suggestions, or need help? Our support team is here 24/7 to assist you. We love hearing from our community!</p>
+        <button class="card-button" onclick="contactSupport()">📧 Get Help</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Help Center</a>
+        <a href="#">Developer API</a>
+      </div>
+      <p>&copy; 2025 GameVerse. All rights reserved. Made with ❤️ for gamers worldwide.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Theme Toggle
+    let isDark = false;
+    
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.classList.toggle('dark', isDark);
+      
+      const themeBtn = document.querySelector('.theme-toggle');
+      themeBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+      
+      // Store preference
+      localStorage.setItem('gameverse-theme', isDark ? 'dark' : 'light');
+    }
+    
+    // Load saved theme (using memory instead of localStorage for Claude.ai compatibility)
+    let savedTheme = 'light'; // Default theme
+    
+    // Page Navigation - Fixed version
+    function showPage(pageId) {
+      console.log('Switching to page:', pageId);
+      
+      // Hide all pages
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // Show selected page
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        targetPage.classList.add('active');
+      } else {
+        console.error('Page not found:', pageId);
+        return;
+      }
+      
+      // Update navigation active states
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Find and activate the correct nav link
+      navLinks.forEach(link => {
+        const linkText = link.textContent.toLowerCase();
+        if ((pageId === 'home' && linkText === 'home') ||
+            (pageId === 'games' && linkText === 'games') ||
+            (pageId === 'videos' && linkText === 'videos') ||
+            (pageId === 'community' && linkText === 'community') ||
+            (pageId === 'about' && linkText === 'about')) {
+          link.classList.add('active');
+        }
+      });
+      
+      // Scroll to top smoothly
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Show notification
+      const pageNames = {
+        'home': '🏠 Home',
+        'games': '🎮 Games',
+        'videos': '🎬 Videos', 
+        'community': '👥 Community',
+        'about': 'ℹ️ About'
+      };
+      
+      showNotification(`Switched to ${pageNames[pageId]} page`, 'success');
+    }
+    
+    // Game Launch Simulation
+    function playGame(game) {
+      const messages = {
+        'minecraft': 'Launching Minecraft... Building your world! 🏗️',
+        'scratch': 'Opening Scratch Studio... Ready to create! 🎨',
+        'amongus': 'Joining Among Us lobby... Trust no one! 🚀',
+        'templerun': 'Starting Temple Run... Keep running! 🏃',
+        'subway': 'Loading Subway Surfers... Surf time! ⚡',
+        '2048': 'Initializing 2048... Can you reach 2048? 🧩'
+      };
+      
+      alert(messages[game] || 'Loading game...');
+    }
+    
+    // Chat System
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const chatBox = document.getElementById('chatBox');
+      
+      if (input.value.trim()) {
+        const message = document.createElement('div');
+        message.className = 'message';
+        message.innerHTML = `<strong>You:</strong> ${input.value}`;
+        
+        chatBox.appendChild(message);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        input.value = '';
+        
+        // Simulate response
+        setTimeout(() => {
+          const responses = [
+            "That's awesome! 🎮",
+            "I agree! Great point!",
+            "Thanks for sharing!",
+            "Cool! What's your favorite game?",
+            "Nice! Keep gaming! 🚀"
+          ];
+          
+          const response = document.createElement('div');
+          response.className = 'message';
+          response.innerHTML = `<strong>GameBot:</strong> ${responses[Math.floor(Math.random() * responses.length)]}`;
+          
+          chatBox.appendChild(response);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }, 1000);
+      }
+    }
